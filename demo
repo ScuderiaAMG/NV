@@ -1,0 +1,18 @@
+# ================ 路径配置区域 ================
+# 目标图像目录（存放32个类别的图片）
+TARGET_DIR = "/home/legion/dataset/raw_data"  # 修改为你的目标图片路径
+
+# 背景图像目录（存放17张背景图片）
+BACKGROUND_DIR = "/home/legion/dataset/background_data"  # 修改为你的背景图片路径
+
+# 输出数据集目录（自动创建）
+OUTPUT_DIR = "/home/legion/dataset/aug_data"  # 修改为你想保存数据集的路径
+
+# YOLO预训练模型路径
+PRETRAINED_MODEL = "/home/legion/dataset/yolov8x.pt"  # 修改为你的yolov8x.pt路径
+
+# 最终训练模型保存路径
+FINAL_MODEL_PATH = "/home/legion/dataset/trained_model.pt"  # 修改为最终模型保存路径
+# =============================================
+
+/home/legion/Documents/FirstRace/7*/best.pt
