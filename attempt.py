@@ -243,7 +243,7 @@ def train_yolov8():
     except Exception as e:
         print(f"Error during training: {str(e)}")
         return
-    
+     
     elapsed = time.time() - start_time
     while elapsed < train_time:
         time.sleep(60)
