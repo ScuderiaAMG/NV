@@ -1,5 +1,13 @@
 # NV
 一个在本地部署模型的脚本集
+
+CPU - Intel Core I7-14700HX 28Cores
+
+GPU - NVIDIA RTX 4060 Laptop GPU 8GB
+
+RAM - DDR5-5200 64GB
+
+SYS - Ubuntu 20.04.6
 ## 对于test脚本：
 这些.py文件设计都是为了模型训练。
 ### test.py
