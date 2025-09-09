@@ -40,7 +40,8 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 # 扩散过程
 def q_sample(x_0, t):
     noise = torch.randn_like(x_0).to(device)
-    return torch.sqrt(1 - beta[t]) * x_0 + torch.sqrt(beta[t]) * noise
+    beta_t = beta[t].unsqueeze(1)  # [batch_size, 1]
+    return torch.sqrt(1 - beta_t) * x_0 + torch.sqrt(beta_t) * noise
  
 # 反扩散过程
 def p_sample(x_t, t):
