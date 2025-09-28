@@ -494,12 +494,77 @@ def create_synthetic_dataset_parallel(augmented_path, background_images, output_
 
     print(f"Completed synthetic dataset creation. Total images: {image_counter}")
 
+    # >>>>>>>>>>>>>>>>>> 新增代码开始 <<<<<<<<<<<<<<<<<<
+    # 添加纯背景图像以增强模型对整张图片的判别能力
+    print("正在向数据集中添加纯背景图像...")
+    added_bg_count = add_pure_background_images(
+        background_images=background_images,
+        output_path=output_path,
+        pure_bg_ratio=0.1  # 可根据需要调整，例如0.05表示5%
+    )
+    image_counter += added_bg_count
+    print(f"数据集创建完成。总图像数（含纯背景）: {image_counter}")
+    # >>>>>>>>>>>>>>>>>> 新增代码结束 <<<<<<<<<<<<<<<<<<
+
     # Create classes.txt
     with open(os.path.join(output_path, "classes.txt"), 'w') as f:
         for class_name in classes:
             f.write(f"{class_name}\n")
 
     return classes, image_counter
+
+def add_pure_background_images(background_images, output_path, pure_bg_ratio=0.1):
+    """
+    向合成数据集中添加纯背景图像（无任何目标）。
+    
+    Args:
+        background_images (list): 已加载的背景图像列表。
+        output_path (str): 合成数据集的根目录路径。
+        pure_bg_ratio (float): 纯背景图像占总合成图像数量的比例。例如0.1表示10%。
+    """
+    import random
+    from pathlib import Path
+
+    # 确保输出目录存在
+    images_dir = Path(output_path) / "images"
+    labels_dir = Path(output_path) / "labels"
+    images_dir.mkdir(parents=True, exist_ok=True)
+    labels_dir.mkdir(parents=True, exist_ok=True)
+
+    # 计算当前已有的合成图像总数
+    existing_image_count = len(list(images_dir.glob("*.jpg"))) + len(list(images_dir.glob("*.png")))
+    
+    # 计算需要添加的纯背景图像数量
+    num_pure_bg = int(existing_image_count * pure_bg_ratio)
+    # 为了安全，确保不会超过可用的背景图数量
+    num_pure_bg = min(num_pure_bg, len(background_images))
+    
+    if num_pure_bg <= 0:
+        print("警告: 未添加纯背景图像。请检查合成数据集是否已生成或比例是否过小。")
+        return 0
+
+    # 随机选择背景图像索引，避免重复
+    selected_bg_indices = random.sample(range(len(background_images)), num_pure_bg)
+    
+    added_count = 0
+    for i, bg_idx in enumerate(tqdm(selected_bg_indices, desc="Adding pure background images")):
+        bg_img = background_images[bg_idx]
+        img_filename = f"pure_bg_{i:06d}.jpg"
+        label_filename = f"pure_bg_{i:06d}.txt"
+        
+        img_path = images_dir / img_filename
+        label_path = labels_dir / label_filename
+        
+        # 保存图像
+        cv2.imwrite(str(img_path), bg_img)
+        # 创建空的标签文件（这是关键！）
+        with open(label_path, 'w') as f:
+            pass  # 创建一个空文件
+        
+        added_count += 1
+
+    print(f"✅ 成功添加 {added_count} 张纯背景图像到数据集。")
+    return added_count
 
 def setup_yolo_dataset_structure(synthetic_path, output_yolo_path, train_ratio=0.7, val_ratio=0.2):
     """
