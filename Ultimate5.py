@@ -762,43 +762,76 @@ def train_yolov11s(dataset_yaml, output_dir="./runs/train"):
 
     return model, results
 
+# def optimize_model(model, dataset_yaml):
+#     """
+#     Model optimization with focus on generalization
+#     """
+#     print("Starting model optimization with generalization focus...")
+
+#     # Conservative hyperparameter optimization
+#     try:
+#         result_grid = model.tune(
+#             data=dataset_yaml,
+#             use_ray=True,
+#             grace_period=5,  # Shorter grace period
+#             gpu_per_trial=1,
+#             iterations=15,   # Reduced iterations
+#             # Conservative search space
+#             space={
+#                 'lr0': (1e-5, 5e-2),  # Narrower range
+#                 'lrf': (0.005, 0.5),  # Narrower range
+#                 'momentum': (0.8, 0.95),
+#                 'weight_decay': (0.0005, 0.005),  # Focus on regularization
+#                 'warmup_epochs': (3.0, 8.0),
+#                 'warmup_momentum': (0.7, 0.9),
+#                 'box': (3.0, 8.0),  # Narrower range
+#                 'cls': (0.5, 2.0),  # Balanced range
+#             }
+#         )
+#         print("Conservative hyperparameter tuning completed")
+#     except Exception as e:
+#         print(f"Hyperparameter tuning failed: {e}")
+
+#     # Export with optimization
+#     try:
+#         model.export(format="pb")
+#         print("Model exported to TensorFlow format")
+#     except Exception as e:
+#         print(f"Model export failed: {e}")
+
+#     return model
 def optimize_model(model, dataset_yaml):
     """
     Model optimization with focus on generalization
     """
     print("Starting model optimization with generalization focus...")
 
-    # Conservative hyperparameter optimization
+    # 1. 尝试超参调优（确保已安装 ray[tune]）
     try:
         result_grid = model.tune(
             data=dataset_yaml,
             use_ray=True,
-            grace_period=5,  # Shorter grace period
+            grace_period=5,
             gpu_per_trial=1,
-            iterations=15,   # Reduced iterations
-            # Conservative search space
+            iterations=15,
             space={
-                'lr0': (1e-5, 5e-2),  # Narrower range
-                'lrf': (0.005, 0.5),  # Narrower range
+                'lr0': (1e-5, 5e-2),
+                'lrf': (0.005, 0.5),
                 'momentum': (0.8, 0.95),
-                'weight_decay': (0.0005, 0.005),  # Focus on regularization
+                'weight_decay': (0.0005, 0.005),
                 'warmup_epochs': (3.0, 8.0),
-                'warmup_momentum': (0.7, 0.9),
-                'box': (3.0, 8.0),  # Narrower range
-                'cls': (0.5, 2.0),  # Balanced range
+                'box': (3.0, 8.0),
+                'cls': (0.5, 2.0),
             }
         )
         print("Conservative hyperparameter tuning completed")
     except Exception as e:
-        print(f"Hyperparameter tuning failed: {e}")
+        print(f"Hyperparameter tuning skipped or failed: {e}")
 
-    # Export with optimization
-    try:
-        model.export(format="pb")
-        print("Model exported to TensorFlow format")
-    except Exception as e:
-        print(f"Model export failed: {e}")
+    # 2. 【重要】我们不需要导出为其他格式，.pt 文件已在训练时生成
+    # 因此，此处不执行任何 export 操作
 
+    # 直接返回原始模型对象，它已经包含了训练好的权重和 save_dir 属性
     return model
 
 def analyze_results(model, dataset_path):
