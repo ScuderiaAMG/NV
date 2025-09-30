@@ -16,3 +16,7 @@ FINAL_MODEL_PATH = "/home/legion/dataset/trained_model.pt"  # 修改为最终模
 # =============================================
 
 /home/legion/Documents/FirstRace/7*/best.pt
+
+
+a next gen program to enhance photos
+翻转、裁剪、缩放、调整对比度
