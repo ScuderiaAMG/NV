@@ -700,7 +700,7 @@ def train_yolov11s(dataset_yaml, output_dir="./runs/train"):
     # Enhanced training parameters with regularization
     training_params = {
         'data': dataset_yaml,
-        'epochs': 100,
+        'epochs': 1000,
         'imgsz': 640,
         'batch': 8,
         'workers': 4,
