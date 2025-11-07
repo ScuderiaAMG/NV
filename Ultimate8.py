@@ -269,7 +269,7 @@ def create_class_file(output_dir, class_names):
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     input_dir = os.path.join(current_dir, "input_data")
-    output_dir = os.path.join(current_dir, "yolo_dataset_927")
+    output_dir = os.path.join(current_dir, "dataset")
     print(f"输入目录: {input_dir}")
     print(f"输出目录: {output_dir}")
     try:

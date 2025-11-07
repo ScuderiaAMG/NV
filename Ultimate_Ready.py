@@ -5,7 +5,7 @@ from ultralytics import YOLO
 def main():
     model = YOLO('yolo12n')
     model.train(
-        data='./yolo_dataset_927/dataset.yaml',
+        data='./dataset/dataset.yaml',
         epochs=300,
         patience=100,
         batch=108,
@@ -15,7 +15,7 @@ def main():
         cache=False,
         device='0',
         workers=8,
-        name='gjs_train',
+        name='escherichia_train',
         exist_ok=False,
         pretrained=True,
         optimizer='auto',
