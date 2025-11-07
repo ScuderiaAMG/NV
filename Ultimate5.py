@@ -889,7 +889,7 @@ def main():
     start_time = datetime.now()
 
     # Set paths
-    base_path = "/home/legion/dataset"
+    base_path = "/home/airhust/escherichia"
     raw_dataset_path = os.path.join(base_path, "raw_dataset")
     background_path = os.path.join(base_path, "trash", "empty")
     augmented_path = os.path.join(base_path, "augmented_dataset")
