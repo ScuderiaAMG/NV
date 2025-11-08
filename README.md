@@ -107,6 +107,57 @@ F1分数标准差	0
 ### Ultimate2.py
 一个测试脚本与草稿本，是ultimate代码的demo
 
+### Ultimate3.py
+
+### Ultimate4.py
+
+### Ultimate5.py
+
+### Ultimate_Ready.py    Ultimate7/8.py
+在此工程目录中，Ultimate7/8用来进行数据增强；Ultimate_Ready作为主训练循环，在airhust2服务器可以开启训练，是一个较为完备的模型训练循环。
+
+使用方法： /  conda activate gjs  /  python3 Ultimate8.py   /*等待数据处理结束*/    python3 Ultimate_ready.py    即可开启训练。
+
+对于elite_race的模型准备，创建工程workspace后，第一级根目录下包含：
+
+Ultimate_Ready.py Ultimate8.py Ultimate7.py runs/ dataset/ input_data/
+
+input_data下包含：各级目标的标签名，以及对应内存的图片；空背景；在labelImg进行的yolo格式标签label()
+
+runs下包含：detect
+
+dataset下包含：dataset.yaml   images/   labels/  其中两文件夹内不需要手动操作，会有脚本生成的数据集；dataset.yaml可参见本仓库根目录下的dataset.yaml.
+
+--------------------------------------------------------------------------------------------
+
+对于本次elite_race的模型准备，采用了yolov12n,算力平台为NV RTX 4090D 24GB,训练在第242个epoch(9.994H)收敛终止.
+
+Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+
+242/300   21.6G     0.1061     0.09759     0.8029      4        640: 100%|██████████| 401/401
+
+Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 50/50 
+
+all       10799      12152      0.969        0.968     0.98      0.978
+
+---------------------------------------------------------------------------------------------
+
+Ultralytics 8.3.170  Python-3.8.20 torch-2.1.0+cu121 CUDA:0 (NVIDIA GeForce RTX 4090 D, 24210MiB)
+
+YOLOv12n summary (fused): 159 layers, 2,557,118 parameters, 0 gradients, 6.3 GFLOPs
+
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 50/50
+
+                   all      10799      12152       0.98      0.965      0.983      0.981
+
+                     H       5616       5942      0.978      0.966      0.983      0.981
+
+                target       5847       6210      0.983      0.965      0.983      0.981
+
+Speed: 0.1ms preprocess, 0.4ms inference, 0.0ms loss, 1.1ms postprocess per image
+
+----------------------------------------------------------------------------------------------
+
 #### 您需要做的准备：
 ##### 在background_scene/目录中放置10+张无人机拍摄的场景图片，不需要任何标注，只需原始拍摄图片；
 ##### 在raw_dataset/目录中准备目标物体图片，按类别分文件夹存放，使用透明背景的PNG格式最佳，如果只有JPG，脚本会自动添加透明背景
